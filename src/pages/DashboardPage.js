@@ -1,50 +1,50 @@
 import React, { useEffect, useState } from "react";
-const { tableau } = window;
-
-let viz;
+import TableauPage from "./TableauPage";
 
 const DashboardPage = () => {
-  const [url] = useState(
-    "https://public.tableau.com/views/RegionalSampleWorkbook/Storms"
-  );
+  const [tableauProject, setTableauProject] = useState(null);
 
-  const initTableau = () => {
-    return new Promise((resolve, reject) => {
-      const tableauOptions = {
-        onFirstInteractive: () => {
-          resolve();
-        },
-      };
-
-      const vizContainer = document.getElementById("tableauVizContainer"); // Replace with your container ID+
-
-      if (viz) {
-        viz.dispose();
-      }
-
-      viz = new tableau.Viz(vizContainer, url, tableauOptions); // Replace with your Tableau visualization URL
-    });
-  };
-
-  useEffect(() => {
-    const initializeTableau = async () => {
-      await initTableau();
-    };
-
-    initializeTableau();
-  }, []);
+  // replace with actual links
+  const links = [
+    {
+      type: "Spine UI",
+      url: "https://public.tableau.com/views/Superstore_24/Overview",
+    },
+    {
+      type: "Star UI - (US Server)",
+      url: "http://public.tableau.com/views/WorldIndicators/GDPpercapita",
+    },
+    {
+      type: "Star UI - (China Server)",
+      url: "https://public.tableau.com/views/TheWideningDivide/01",
+    },
+  ];
 
   return (
     <div>
       <h2>Dashboard Page</h2>
-      <div id="tableauVizContainer" style={setVizStyle}></div>
+      <ul>
+        {links.map((link, index) => (
+          <div key={link.type}>
+            <a
+              style={{
+                cursor: "pointer",
+                textDecoration: "underline",
+                color: "blue",
+              }}
+              onClick={() => setTableauProject(link)}
+            >
+              {`${index + 1}. ${link.type}`}
+            </a>
+          </div>
+        ))}
+      </ul>
+
+      <div>
+        {tableauProject && <TableauPage tableauProject={tableauProject} />}
+      </div>
     </div>
   );
-};
-
-const setVizStyle = {
-  width: "800px",
-  height: "700px",
 };
 
 export default DashboardPage;
